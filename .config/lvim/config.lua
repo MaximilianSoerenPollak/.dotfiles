@@ -41,10 +41,11 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 --     ["<C-k>"] = actions.move_selection_previous,
 --   },
 -- }
-lvim.transparent_window = true
+--lvim.transparent_window = true
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["?"] = { "<cmd>:Cheatsheet<CR>", "Cheatsheet" }
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["v"] = { "<cmd>vsplit term://vd <cfile><CR>", "View Data" }
 -- lvim.builtin.which_key.mappings["t"] = {
 --   name = "+Trouble",
 --   r = { "<cmd>Trouble lsp_references<cr>", "References" },
@@ -63,21 +64,26 @@ lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
+-- VIM Mappings ---
+-- vim.api.nvim_set_keymap('View Data', '<Leader><v>', '<cmd>vsplit term://vd <cfile><CR>', { noremap = true, silent = true })
+
+
+
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
-  "bash",
-  "c",
-  "javascript",
-  "json",
-  "lua",
-  "python",
-  "typescript",
-  "tsx",
-  "css",
-  "rust",
-  "java",
-  "yaml",
+    "bash",
+    "c",
+    "javascript",
+    "json",
+    "lua",
+    "python",
+    "typescript",
+    "tsx",
+    "css",
+    "rust",
+    "java",
+    "yaml",
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -109,12 +115,8 @@ lvim.builtin.treesitter.highlight.enabled = true
 --   --Enable completion triggered by <c-x><c-o>
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
-
--- -- set a formatter, this will override the language server formatting capabilities (if it exists)
--- local formatters = require "lvim.lsp.null-ls.formatters"
--- formatters.setup {
---   { command = "black", filetypes = { "python" } },
 --   { command = "isort", filetypes = { "python" } },
+
 --   {
 --     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
 --     command = "prettier",
@@ -146,35 +148,42 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- Additional Plugins
 lvim.plugins = {
-  "luisiacc/gruvbox-baby",
-  { 'sudormrfbin/cheatsheet.nvim', requires = 'nvim-telescope/telescope.nvim', 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' },
-  { "tzachar/cmp-tabnine", run = "./install.sh", requires = "hrsh7th/nvim-cmp", event = "InsertEnter", },
-  { "wakatime/vim-wakatime" },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "BufRead",
-    setup = function()
-      vim.g.indentLine_enabled = 1
-      vim.g.indent_blankline_char = "▏"
-      vim.g.indent_blankline_filetype_exclude = { "help", "terminal", "dashboard" }
-      vim.g.indent_blankline_buftype_exclude = { "terminal" }
-      vim.g.indent_blankline_show_trailing_blankline_indent = false
-      vim.g.indent_blankline_show_first_indent_level = false
-    end,
-  },
-  {
-    "iamcco/markdown-preview.nvim",
-    run = "cd app && npm install",
-    ft = "markdown",
-    config = function()
-      vim.g.mkdp_auto_start = 1
-    end,
-  },
-  { "Pocco81/AutoSave.nvim",
-    config = function()
-      require("autosave").setup()
-    end,
-  }
+    "luisiacc/gruvbox-baby",
+    { 'sudormrfbin/cheatsheet.nvim', requires = 'nvim-telescope/telescope.nvim', 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' },
+    { "tzachar/cmp-tabnine", run = "./install.sh", requires = "hrsh7th/nvim-cmp", event = "InsertEnter", },
+    { "wakatime/vim-wakatime" },
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        event = "BufRead",
+        setup = function()
+            vim.g.indentLine_enabled = 1
+            vim.g.indent_blankline_char = "▏"
+            vim.g.indent_blankline_filetype_exclude = { "help", "terminal", "dashboard" }
+            vim.g.indent_blankline_buftype_exclude = { "terminal" }
+            vim.g.indent_blankline_show_trailing_blankline_indent = false
+            vim.g.indent_blankline_show_first_indent_level = false
+        end,
+    },
+    {
+        "iamcco/markdown-preview.nvim",
+        run = "cd app && npm install",
+        ft = "markdown",
+        config = function()
+            vim.g.mkdp_auto_start = 1
+        end,
+    },
+    {
+        "Pocco81/AutoSave.nvim",
+        config = function()
+            require("autosave").setup()
+        end,
+    },
+    {
+        'python/black'
+    },
+    {
+        'chrisbra/csv.vim'
+    },
 }
 --     {"folke/tokyonight.nvim"},
 --     {
@@ -187,3 +196,49 @@ lvim.plugins = {
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
 -- }
+----------- PERSONAL CONFIGURATIONS FOR VIM --------
+-- vim.api.nvim_set_keymap('v', '<g1>', '<cmd>vsplit term://vd <cfile><CR>', { noremap = true, silent = true })
+local opt = vim.opt
+
+
+opt.clipboard = "unnamed" -- allows neovim to access the system clipboard
+opt.backup = false -- creates a backup file
+opt.cmdheight = 1 -- more space in the neovim command line for displaying messages
+opt.completeopt = { "menuone", "noselect" } -- mostly just for cmp
+opt.conceallevel = 0 -- so that `` is visible in markdown files
+opt.fileencoding = "utf-8" -- the encoding written to a file
+opt.hlsearch = true -- highlight all matches on previous search pattern
+opt.ignorecase = true -- ignore case in search patterns
+opt.mouse = "a" -- allow the mouse to be used in neovim
+opt.pumheight = 10 -- pop up menu height
+opt.showmode = false -- we don't need to see things like -- INSERT -- anymore
+opt.showtabline = 4 -- always show tabs
+opt.smartcase = true -- smart case
+opt.smartindent = true -- make indenting smarter again
+opt.splitbelow = true -- force all horizontal splits to go below current window
+opt.splitright = true -- force all vertical splits to go to the right of current window
+opt.swapfile = false -- creates a swapfile
+opt.termguicolors = true -- set term gui colors (most terminals support this)
+opt.timeoutlen = 100 -- time to wait for a mapped sequence to complete (in milliseconds)
+opt.undofile = true -- enable persistent undo
+opt.updatetime = 300 -- faster completion (4000ms default)
+opt.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program) it is not allowed to be edited
+opt.expandtab = true -- convert tabs to spaces
+opt.shiftwidth = 4 -- the number of spaces inserted for each indentation
+opt.tabstop = 4 -- insert 2 spaces for a tab
+opt.cursorline = true -- highlight the current line
+opt.number = true -- set numbered lines
+opt.relativenumber = true -- set relative numbered lines
+opt.numberwidth = 4 -- set number column width to 2 {default 4}
+opt.signcolumn = "yes" -- always show the sign column otherwise it would shift the text each time
+opt.wrap = false -- display lines as one long line
+opt.scrolloff = 8 -- is one of my fav
+opt.sidescrolloff = 8
+opt.colorcolumn = "80"
+opt.guifont = "firacode:h17" -- the font used in graphical neovim applications
+
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+    { exe = "black", filetypes = { "python" }
+    }
+}
