@@ -1,0 +1,11 @@
+include current-theme.conf
+enable_audio_bell no
+font_family      VitorMono
+background_opacity 0.9
+disable_ligatures always
+
+# BEGIN_KITTY_THEME
+# citylights
+include current-theme.conf
+# END_KITTY_THEME
+
