@@ -12,12 +12,12 @@ vnoremap("<C-k>", function()
     if ls.expand_or_jumpable() then
         ls.expand_or_jump()
     end
-    end, {silent = true})
+end, { silent = true })
 vnoremap("<C-j>", function()
     if ls.jumpable(-1) then
         ls.jump(-1)
     end
-end, {silent = true})
+end, { silent = true })
 
 vnoremap("<C-l>", function()
     if ls.choice_active() then
@@ -29,13 +29,13 @@ inoremap("<C-k>", function()
     if ls.expand_or_jumpable() then
         ls.expand_or_jump()
     end
-    end, {silent = true})
+end, { silent = true })
 
 inoremap("<C-j>", function()
     if ls.jumpable(-1) then
         ls.jump(-1)
     end
-end,{silent = true})
+end, { silent = true })
 
 inoremap("<C-l>", function()
     if ls.choice_active() then
@@ -81,9 +81,9 @@ nnoremap("<F10>", "<Cmd>:lua require('dap').terminate()<CR>")
 ----- FILE ----
 wk.register({
     f = {
-        name = "file", -- optional group name
-        s = { "<cmd>Telescope find_files<cr>", "Search File" }, -- create a binding with label
-        t = { "<cmd>Telescope live_grep<cr>", "Search Text" }, -- create a binding with label
+        name = "file",                                          -- optional group name
+        f = { "<cmd>Telescope find_files<cr>", "Search File" }, -- create a binding with label
+        t = { "<cmd>Telescope live_grep<cr>", "Search Text" },  -- create a binding with label
         w = { "<cmd>:w<CR>", "Save File" },
         r = { "<cmd>:file ", "Rename File" },
     },
@@ -107,17 +107,12 @@ wk.register({
     ["<leader>n"] = { "<cmd>:set hlsearch!<CR>", "Toggle Highlights" }
 })
 
--- Toggleterm (Maybe no longer needed)
-wk.register({
-    ["<leader>t"] = { '<CMD>:lua require("FTerm").toggle()<CR>', "Toggle Floating Term" }
-})
-
 
 -- GOlang specific settings
 wk.register({
     l = {
         name = "LSP",
-        K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Documentation"},
+        K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Documentation" },
         r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename Variable" },
         f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format File" },
 
@@ -152,7 +147,7 @@ wk.register({
 -- GIT --
 -- Undotree --
 wk.register({
-    ["<leader>u"] = {"<cmd>UndotreeToggle<CR>", "Toggle UndoTree" }
+    ["<leader>u"] = { "<cmd>UndotreeToggle<CR>", "Toggle UndoTree" }
 })
 -- Harpoon --
 wk.register({
@@ -174,6 +169,16 @@ wk.register({
     ["<leader>2"] = { "<cmd>:lua require('harpoon.ui').nav_file(2)<CR>", "Select File 2" }
 })
 
+wk.register({
+    t = {
+        name = "Trouble",
+        t = { "<cmd>:lua require('trouble').toggle()<CR>", "Toggle trouble" },
+        w = { "<cmd>:lua require('trouble').toggle('workspace_diagnostics')<CR>", "Toggle Workspace Diagnostics" },
+        d = { "<cmd>:lua require('trouble').toggle('document_diagnostics')<CR>", "Toggle Document Diagnostics" },
+        q = { "<cmd>:lua require('trouble').toggle('quickfix')<CR>", "Toggle quickfix list" },
+        r = { "<cmd>:lua require('trouble').toggle('lsp_references')<CR>", "Toggle lsp references" },
+    },
+}, { prefix = "<leader>" })
 
 --- DEBUGING
 --wk.register({

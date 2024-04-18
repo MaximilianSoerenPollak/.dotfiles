@@ -44,4 +44,4 @@ vim.g.mapleader = " "
 -- vim.g.loaded_netrwPlugin = 1
 --
 vim.g.python3_host_prog = "~/.venv/neovim/bin/python"
--- Colorscheme 
+
