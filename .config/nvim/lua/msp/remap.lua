@@ -2,6 +2,7 @@ local inoremap = require("msp.keymap").inoremap
 local vnoremap = require("msp.keymap").vnoremap
 local nnoremap = require("msp.keymap").nnoremap
 local wk = require("which-key")
+
 local ls = require "luasnip"
 -- Bring up netr (Explorer)
 -- Move current line up/down.
@@ -79,109 +80,96 @@ nnoremap("<F10>", "<Cmd>:lua require('dap').terminate()<CR>")
 
 
 ----- FILE ----
-wk.register({
-    f = {
-        name = "file",                                          -- optional group name
-        f = { "<cmd>Telescope find_files<cr>", "Search File" }, -- create a binding with label
-        t = { "<cmd>Telescope live_grep<cr>", "Search Text" },  -- create a binding with label
-        w = { "<cmd>:w<CR>", "Save File" },
-        r = { "<cmd>:file ", "Rename File" },
-    },
-}, { prefix = "<leader>" })
+wk.add({
+        { "<leader>f", group="file" },
+        {"<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Search File" }, -- create a binding with label
+        {"<leader>ft", "<cmd>Telescope live_grep<cr>", desc = "Search Text" },  -- create a binding with label
+        {"<leader>fw", "<cmd>:w<CR>", desc = "Save File" },
+        {"<keader>fr", "<cmd>:file ", desc = "Rename File" },
+    })
 
 -- FileTree --
-wk.register({
-    ["<leader>e"] = { "<cmd>:Lexplore<CR>", "View File-Tree" }
+wk.add({
+    { "<leader>e",  "<cmd>:Lexplore<CR>", desc = "View File-Tree" }
 })
 
 ------ VIEW ---
-wk.register({
-    v = {
-        name = "view",
-        d = { "<cmd>vsplit term://vd <cfile><CR>", "View Data" }
-    },
-}, { prefix = "<leader>" })
+wk.add({
+    {
+        {"<leader>v", group="view"},
+        {"<leader>vd", "<cmd>vsplit term://vd <cfile><CR>", desc = "View Data" }
+    }
+})
 
 -- Make highlights go away
-wk.register({
-    ["<leader>n"] = { "<cmd>:set hlsearch!<CR>", "Toggle Highlights" }
+wk.add({
+    {"<leader>n", "<cmd>:set hlsearch!<CR>", desc = "Toggle Highlights" }
 })
 
 
 -- GOlang specific settings
-wk.register({
-    l = {
-        name = "LSP",
-        K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Documentation" },
-        r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename Variable" },
-        f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format File" },
-
-
-        g = {
-            name = "GO",
-            c = { "<cmd>:GoCmt<CR>", "Comment" },
-            t = {
-                name = "Tags",
-                a = { "<cmd>:GoAddTag<CR>", "Add Tags" },
-                r = { "<cmd>:GoRmTag<CR>", "Remove Tags" },
-            },
-            f = { "<cmd>:lua require('go.format').goimport()<CR>", "Fix Imports" },
-        },
+wk.add({
+    {
+        {"<leader>l", group = "LSP"},
+        {"<leader>lK", "<cmd>lua vim.lsp.buf.hover()<CR>", desc = "Hover Documentation" },
+        {"<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", desc = "Rename Variable" },
+        {"<leader>lf",  "<cmd>lua vim.lsp.buf.format()<CR>", desc = "Format File" },
+        {"<leader>lg", group = "GO"},
+        {"<leader>lgf", "<cmd>:lua require('go.format').goimport()<CR>", desc = "Fix Imports" },
+        {"<leader>lgc", "<cmd>:GoCmt<CR>", desc = "Comment" },
+        {"<leader>lgt", group="Tags"},
+        {"<leader>lgcta", "<cmd>:GoAddTag<CR>", desc = "Add Tags" },
+        {"<leader>lgctr", "<cmd>:GoRMTag<CR>", desc = "Remove Tags" },
     },
-}, { prefix = "<leader>" })
+    })
 
 -- Debbuging --
-wk.register({
+wk.add({
 
-    d = {
-        name = "Debug",
-        b = { "<Cmd>:lua require('dap').toggle_breakpoint()<CR>", "Breakpoint" },
-        B = { "<Cmd>:lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
-            "Breakpoint Condition" },
-        p = { "<Cmd>:lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", "Log Point" },
-        r = { "<Cmd>:lua require('dap').repl.open()<CR>", "Repl Open" },
-        l = { "<Cmd>:lua require('dap').run_last()<CR>", "Run Last" },
-    },
-}, { prefix = "<leader>" })
+    {
+        {"<leader>d", group="Debug"},
+        {"<leader>db", "<Cmd>:lua require('dap').toggle_breakpoint()<CR>", desc = "Breakpoint" },
+        {"<leader>dB", "<Cmd>:lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", desc = "Breakpoint Condition"},
+        {"<leader>dp", "<Cmd>:lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", desc = "Log Point" },
+        {"<leader>dr", "<Cmd>:lua require('dap').repl.open()<CR>", desc = "Repl Open" },
+        {"<leader>dl", "<Cmd>:lua require('dap').run_last()<CR>", desc = "Run Last" },
+    }
+})
 
 -- GIT --
 -- Undotree --
-wk.register({
-    ["<leader>u"] = { "<cmd>UndotreeToggle<CR>", "Toggle UndoTree" }
+wk.add({
+    {"<leader>u", "<cmd>UndotreeToggle<CR>", desc = "Toggle UndoTree" }
 })
 -- Harpoon --
-wk.register({
-    h = {
-        name = "Harpoon",
-        a = { "<cmd>:lua require('harpoon.mark').add_file()<CR>", "Add current file" },
-        t = { "<cmd>:lua require('harpoon.ui').toggle_quick_menu()<CR>", "Toggle menu" },
-        n = { "<cmd>:lua require('harpoon.ui').nav_next()<CR>", "Next item" },
-        p = { "<cmd>:lua require('harpoon.ui').nav_prev()<CR>", "Previous item" },
-        ['1'] = { "<cmd>:lua require('harpoon.ui').nav_file(1)<CR>", "Select File 1" },
-        ['2'] = { "<cmd>:lua require('harpoon.ui').nav_file(2)<CR>", "Select File 2" },
-        ['3'] = { "<cmd>:lua require('harpoon.ui').nav_file(3)<CR>", "Select File 3" },
-        ['4'] = { "<cmd>:lua require('harpoon.ui').nav_file(4)<CR>", "Select File 4" },
-    },
-}, { prefix = "<leader>" })
+wk.add({
+    {
+        {"<leader>h", group="Harpoon"},
+        {"<leader>ha", "<cmd>:lua require('harpoon.mark').add_file()<CR>", desc = "Add current file" },
+        {"<leader>ht", "<cmd>:lua require('harpoon.ui').toggle_quick_menu()<CR>", desc = "Toggle menu" },
+        {"<leader>hn",  "<cmd>:lua require('harpoon.ui').nav_next()<CR>", desc = "Next item" },
+        {"<leader>hp",  "<cmd>:lua require('harpoon.ui').nav_prev()<CR>", desc = "Previous item" },
+        {"<leader>h1",  "<cmd>:lua require('harpoon.ui').nav_file(1)<CR>", desc = "Select File 1" },
+        {"<leader>h2",  "<cmd>:lua require('harpoon.ui').nav_file(2)<CR>", desc = "Select File 1" },
+        {"<leader>h3",  "<cmd>:lua require('harpoon.ui').nav_file(3)<CR>", desc = "Select File 1" },
+        {"<leader>h4",  "<cmd>:lua require('harpoon.ui').nav_file(4)<CR>", desc = "Select File 1" },
+    }
+})
 -- Make Harpoon File 1 and 2 accessible from the main menue as well (1 less keypress)
-wk.register({
-    ["<leader>1"] = { "<cmd>:lua require('harpoon.ui').nav_file(1)<CR>", "Select File 1" },
-    ["<leader>2"] = { "<cmd>:lua require('harpoon.ui').nav_file(2)<CR>", "Select File 2" }
+wk.add({
+    {"<leader>1", "<cmd>:lua require('harpoon.ui').nav_file(1)<CR>", desc = "Select File 1" },
+    {"<leader>2", "<cmd>:lua require('harpoon.ui').nav_file(2)<CR>", desc = "Select File 2" }
 })
 
-wk.register({
-    t = {
-        name = "Trouble",
-        t = { "<cmd>:lua require('trouble').toggle()<CR>", "Toggle trouble" },
-        w = { "<cmd>:lua require('trouble').toggle('workspace_diagnostics')<CR>", "Toggle Workspace Diagnostics" },
-        d = { "<cmd>:lua require('trouble').toggle('document_diagnostics')<CR>", "Toggle Document Diagnostics" },
-        q = { "<cmd>:lua require('trouble').toggle('quickfix')<CR>", "Toggle quickfix list" },
-        r = { "<cmd>:lua require('trouble').toggle('lsp_references')<CR>", "Toggle lsp references" },
-    },
-}, { prefix = "<leader>" })
+wk.add({"<leader>z", "<cmd>:ZenMode<CR>", desc = "Zen-Mode" })
 
---- DEBUGING
---wk.register({
---    <leader>d  = {
---        "name" = "Debugging"
---
+wk.add({
+    {
+        {"<leader>t", group="Trouble"},
+        {"<leader>tt", "<cmd>:lua require('trouble').toggle()<CR>", desc = "Toggle trouble" },
+        {"<leader>tw", "<cmd>:lua require('trouble').toggle('workspace_diagnostics')<CR>", desc = "Toggle Workspace Diagnostics" },
+        {"<leader>td", "<cmd>:lua require('trouble').toggle('document_diagnostics')<CR>", desc = "Toggle Document Diagnostics" },
+        {"<leader>tq", "<cmd>:lua require('trouble').toggle('quickfix')<CR>", desc = "Toggle quickfix list" },
+        {"<leader>tr", "<cmd>:lua require('trouble').toggle('lsp_references')<CR>", desc = "Toggle lsp references" },
+    },
+})
