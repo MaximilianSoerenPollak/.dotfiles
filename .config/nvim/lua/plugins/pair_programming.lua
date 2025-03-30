@@ -3,7 +3,6 @@ return {
   name = "pair_programming",
   dir = vim.fn.stdpath("config") .. "/lua/plugins/pair_programming",
   config = function()
-
     -- Add commands
     vim.api.nvim_create_user_command("PairProgramming", function()
       require("plugins.pair_programming.layouts").pair_programming()
@@ -21,6 +20,11 @@ return {
     vim.keymap.set("n", "<leader>pt", function()
       require("plugins.pair_programming.layouts").toggle_layout()
     end, { noremap = true, silent = true })
+
+    vim.keymap.set("n", "<leader>pk", "<cmd>Screenkey<CR>", { noremap = true, silent = true })
+
+    vim.keymap.set('n', '<leader>pf', require('plugins.pair_programming.layouts').toggle_file_switch_tracking,
+      { noremap = true, silent = true, desc = "Show file switch info" })
 
     -- Add commands
     vim.api.nvim_create_user_command("PairProgramming", function()

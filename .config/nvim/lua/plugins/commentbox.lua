@@ -1,7 +1,7 @@
 --          ╭─────────────────────────────────────╮
 --          │                TEST                 │
 --          ╰─────────────────────────────────────╯
-return {
+  return {
   "LudoPinelli/comment-box.nvim",
   opts = {
     doc_width = 60, -- width of the document

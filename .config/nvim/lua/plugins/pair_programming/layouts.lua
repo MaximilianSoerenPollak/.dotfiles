@@ -1,5 +1,4 @@
 -- ~/.config/nvim/lua/config/pair_programming.lua
--- ~/.config/nvim/lua/config/pair_programming.lua
 local M = {}
 
 -- Keep track of the current active layout
@@ -20,6 +19,84 @@ M.explorer_config = {
   background_color = "#2E3440",
   -- Add more explorer settings as needed
 }
+
+-- File switching tracking state
+M.file_switch_tracking = {
+  enabled = false,
+  prev_file = nil,
+  current_file = nil,
+  augroup_id = nil
+}
+
+-- Function to notify about file switches
+function M.file_switch_notify()
+  -- Get current file path
+  local current_file = vim.fn.expand('%:p')
+  local current_filename = vim.fn.expand('%:t')
+  
+  -- Only track actual files (not empty buffers or special buffers)
+  if current_file == "" or current_filename == "" then
+    return
+  end
+  
+  -- Skip if it's the same file
+  if current_file == M.file_switch_tracking.current_file then
+    return
+  end
+  
+  -- Update history
+  M.file_switch_tracking.prev_file = M.file_switch_tracking.current_file
+  M.file_switch_tracking.current_file = current_file
+  
+  -- Skip notification if this is the first file (no previous file)
+  if M.file_switch_tracking.prev_file == nil then
+    return
+  end
+  
+  -- Get readable filenames for notification
+  local prev_filename = vim.fn.fnamemodify(M.file_switch_tracking.prev_file, ':t')
+  
+  -- Show notification
+  vim.notify(
+    string.format("Switched from '%s' --> '%s'", prev_filename, current_filename),
+    vim.log.levels.INFO,
+    {
+      title = "File Switch",
+      timeout = 3000 -- 3 seconds
+    }
+  )
+end
+
+-- Toggle file switch tracking on/off
+function M.toggle_file_switch_tracking()
+  if M.file_switch_tracking.enabled then
+    -- Turn off tracking
+    if M.file_switch_tracking.augroup_id then
+      vim.api.nvim_del_augroup_by_id(M.file_switch_tracking.augroup_id)
+      M.file_switch_tracking.augroup_id = nil
+    end
+    M.file_switch_tracking.enabled = false
+    vim.notify("File switch tracking disabled", vim.log.levels.INFO)
+  else
+    -- Turn on tracking
+    local augroup = vim.api.nvim_create_augroup("FileSwitchTracking", { clear = true })
+    M.file_switch_tracking.augroup_id = augroup
+    
+    vim.api.nvim_create_autocmd({ "BufEnter" }, {
+      group = augroup,
+      callback = function()
+        M.file_switch_notify()
+      end,
+      desc = "Track file switching with notifications",
+    })
+    
+    M.file_switch_tracking.enabled = true
+    M.file_switch_tracking.prev_file = nil  -- Reset tracking
+    M.file_switch_tracking.current_file = vim.fn.expand('%:p')
+    
+    vim.notify("File switch tracking enabled", vim.log.levels.INFO)
+  end
+end
 
 -- Apply terminal settings to the current window
 function M.apply_terminal_settings()
