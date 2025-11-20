@@ -116,21 +116,20 @@ if ! shopt -oq posix; then
   fi
 fi
 
+function calcHash() {
+    curl -Ls "$1" | sha256sum | awk '{ print $1 }' | xxd -r -p | base64 | sed 's/^/sha256-/'
+}
+
+
 # Aliases I found usefull.
-alias vim='$HOME/.local/share/bob/nvim-bin/nvim'
+alias vim='/usr/local/bin/nvim'
 alias config='/usr/bin/git --git-dir=/home/maxi/.dotfiles/ --work-tree=/home/maxi'
 alias navenv="source $HOME/.venv/neovim/bin/activate"
 alias avenv='source venv/bin/activate' 
 alias dvenv='deactivate'
 alias ls='ls --classify --tabsize=0 --literal --color=auto --show-control-chars --human-readable --group-directories-first'
-# Set new background image (random)
-alias nbg='feh --randomize --bg-fill ~/Backgroundimages/*'
 # Set alias for getting into neovim config folder faster 
 alias nconf="cd ~/.config/nvim"
-alias displayon="xrandr --output DP-1 --primary --auto --left-of eDP-1"
-alias lib2="ssh libertiesVPS2" 
-alias lib1="ssh libertiesVPS1" 
-alias lnt="golangci-lint run --config=~/.golangci.yaml ./..."
 alias fzn="nvim $fzf"
 # Git branches be colourful and pretty n shit
 parse_git_branch() {
@@ -144,13 +143,12 @@ PROMPT_DIRTRIM=2
 
 
 # Exporting Paths
-export ZEIT_DB=~/.config/zeit.db
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:/home/maxi/.cargo/bin"
 export PATH="$PATH:/home/maxi/lua-language-server/bin"
 export PATH="$PATH:/usr/local/texlive/2024/bin/x86_64-linux"
-export PATH="$PATH:/home/maxi/.local/share/bob/nvim-bin"
+export PATH="$PATH:/usr/local/bin/nvim"
 export FZF_DEFAULT_COMMAND="find -L"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -158,16 +156,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # for Debugging python 
 export PYTHONBREAKPOINT="pudb.set_trace"
-export SCHOOLDATA_DB="postgres://schooldatasuperuser:securepassword@localhost/schooldata"
-
-## Z file.
-. /home/maxi/utils/z/z.sh
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 eval "$(starship init bash)"
-export DEBUG="true"
-##Source the bash completions again
-setxkbmap -option caps:swapescape # Uncomment this when not needed
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 

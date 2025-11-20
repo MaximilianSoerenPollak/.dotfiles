@@ -31,6 +31,13 @@ return {
       style = {
         comments = "none",
         strings = "none",
+        keyword_return = "none",
+      },
+      plugins = {
+        cmp = {
+          match = "none",
+          match_fuzzy = "none",
+        }
       }
     })
   end

@@ -20,6 +20,8 @@ M.explorer_config = {
   -- Add more explorer settings as needed
 }
 
+M.lines_relative = true
+
 -- File switching tracking state
 M.file_switch_tracking = {
   enabled = false,
@@ -33,29 +35,29 @@ function M.file_switch_notify()
   -- Get current file path
   local current_file = vim.fn.expand('%:p')
   local current_filename = vim.fn.expand('%:t')
-  
+
   -- Only track actual files (not empty buffers or special buffers)
   if current_file == "" or current_filename == "" then
     return
   end
-  
+
   -- Skip if it's the same file
   if current_file == M.file_switch_tracking.current_file then
     return
   end
-  
+
   -- Update history
   M.file_switch_tracking.prev_file = M.file_switch_tracking.current_file
   M.file_switch_tracking.current_file = current_file
-  
+
   -- Skip notification if this is the first file (no previous file)
   if M.file_switch_tracking.prev_file == nil then
     return
   end
-  
+
   -- Get readable filenames for notification
   local prev_filename = vim.fn.fnamemodify(M.file_switch_tracking.prev_file, ':t')
-  
+
   -- Show notification
   vim.notify(
     string.format("Switched from '%s' --> '%s'", prev_filename, current_filename),
@@ -81,7 +83,7 @@ function M.toggle_file_switch_tracking()
     -- Turn on tracking
     local augroup = vim.api.nvim_create_augroup("FileSwitchTracking", { clear = true })
     M.file_switch_tracking.augroup_id = augroup
-    
+
     vim.api.nvim_create_autocmd({ "BufEnter" }, {
       group = augroup,
       callback = function()
@@ -89,11 +91,11 @@ function M.toggle_file_switch_tracking()
       end,
       desc = "Track file switching with notifications",
     })
-    
+
     M.file_switch_tracking.enabled = true
-    M.file_switch_tracking.prev_file = nil  -- Reset tracking
+    M.file_switch_tracking.prev_file = nil -- Reset tracking
     M.file_switch_tracking.current_file = vim.fn.expand('%:p')
-    
+
     vim.notify("File switch tracking enabled", vim.log.levels.INFO)
   end
 end
@@ -251,6 +253,15 @@ function M.apply_layout(layout_name)
     M[layout_name]()
   else
     vim.notify("Layout '" .. (layout_name or "nil") .. "' not found", vim.log.levels.ERROR)
+  end
+end
+
+function M.toggle_linenr()
+  if M.lines_relative then
+    vim.cmd("set norelativenumber")
+    M.lines_relative = false
+  else
+    vim.cmd("set relativenumber")
   end
 end
 

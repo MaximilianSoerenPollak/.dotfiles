@@ -24,6 +24,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- local client = vim.lsp.start_client {
+--   name = "sclls",
+--   cmd = { "/home/maxi/dev/scl_ls/main" },
+--   priority = 1,
+-- }
+-- if not client then
+--   vim.notify("didn't do client thing good")
+--   return
+-- end
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = '*',
+--   callback = function()
+--     vim.lsp.buf_attach_client(0, client)
+--   end,
+-- })
+
 --- SETTINGS ---
 
 local opt = vim.opt
@@ -77,6 +94,39 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "lua",
   command = "setlocal shiftwidth=2 tabstop=2"
 })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "rst",
+  command = "setlocal shiftwidth=3 tabstop=3"
+})
+
+vim.g.mkdp_browser="wslview"
+
+
+vim.g.clipboard = {
+    name = 'WslClipboard',
+    copy = {
+        ["+"] = 'clip.exe',
+        ["*"] = 'clip.exe',
+    },
+
+    paste = {
+        ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+        ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+    },
+    cache_enabled = 0,
+}
+vim.opt.spell=true
+vim.opt.spelllang="EN"
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+      vim.api.nvim_set_hl(0, "LspReferenceWrite", {})
+      vim.api.nvim_set_hl(0, "LspReferenceText", {})
+      vim.api.nvim_set_hl(0, "LspReferenceRead", {})
+  end,
+})
+-- vim.cmd('hi LspReferenceWrite guibg=none')
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -97,3 +147,4 @@ require("lazy").setup({
   }
 })
 vim.cmd("colorscheme vague")
+--vim.lsp.set_log_level("trace")

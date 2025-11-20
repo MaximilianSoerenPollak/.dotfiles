@@ -119,14 +119,21 @@ return {
       { "<leader>tu", function() Snacks.picker.undo() end,               desc = "Undo History" },
     })
 
-    -- LSP
-    wk.add({
-      { "gd", function() Snacks.picker.lsp_definitions() end,      desc = "Goto Definition" },
-      { "gD", function() Snacks.picker.lsp_declarations() end,     desc = "Goto Declaration" },
-      { "gr", function() Snacks.picker.lsp_references() end,       nowait = true,                  desc = "References" },
-      { "gI", function() Snacks.picker.lsp_implementations() end,  desc = "Goto Implementation" },
-      { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-    })
+    --LSP
+    -- wk.add({
+    --   { "gd", function() Snacks.picker.lsp_definitions() end,      desc = "Goto Definition" },
+    --   { "gD", function() Snacks.picker.lsp_declarations() end,     desc = "Goto Declaration" },
+    --   { "gr", function() Snacks.picker.lsp_references() end,       nowait = true,                  desc = "References" },
+    --   { "gI", function() Snacks.picker.lsp_implementations() end,  desc = "Goto Implementation" },
+    --   { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+    -- })
+    -- wk.add({
+    --   { "gd", "gd", desc = "Goto Definition" },
+    --   { "gD", "gD", desc = "Goto Declaration" },
+    --   { "gr", "gr", nowait = true, desc = "References" },
+    --   { "gI", "gI", desc = "Goto Implementation" },
+    --   { "gy", "gy", desc = "Goto T[y]pe Definition" },
+    -- })
 
 
     wk.add({
@@ -146,6 +153,7 @@ return {
         { "<leader>lK",    "<cmd>lua vim.lsp.buf.hover()<CR>",                   desc = "Hover Documentation" },
         { "<leader>lr",    "<cmd>lua vim.lsp.buf.rename()<CR>",                  desc = "Rename Variable" },
         { "<leader>lf",    "<cmd>lua vim.lsp.buf.format()<CR>",                  desc = "Format File" },
+        { "<leader>lc",    "<cmd>lua require('conform').format()<CR>",           desc = "Format File via conform" },
         { "<leader>lg",    group = "GO" },
         { "<leader>lgf",   "<cmd>:lua require('go.format').goimport()<CR>",      desc = "Fix Imports" },
         { "<leader>lgc",   "<cmd>:GoCmt<CR>",                                    desc = "Comment" },
@@ -158,8 +166,8 @@ return {
     })
     wk.add({
       {
-        { "<C-;>",  group = "ToggleTerm" },
-        { "<C-;>t", "<cmd>:ToggleTerm<CR>" },
+        { "<C-;>",   group = "ToggleTerm" },
+        { "<C-;>t",  "<cmd>:ToggleTerm<CR>" },
         { "<C-;>ts", "<cmd>:TermSelect<CR>" },
         { "<C-;>tr", "<cmd>:ToggleTermSetName<CR>" },
         { "<C-;>tb", function()
